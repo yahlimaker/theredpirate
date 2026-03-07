@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ניהול מוצרים - הפיראט האדום</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Heebo', sans-serif; background: #f1f5f9; color: #1e293b; }
+    header { background: #0d1b3e; color: white; padding: 16px 32px; display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 1.3rem; }
+    header span { font-size: 1.5rem; }
+    .container { max-width: 1200px; margin: 32px auto; padding: 0 16px; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .toolbar h2 { font-size: 1.1rem; color: #475569; }
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #e63946; color: white; }
+    .btn-save { background: #16a34a; color: white; }
+    .btn-cancel { background: #94a3b8; color: white; }
+    .btn-delete { background: #fee2e2; color: #dc2626; padding: 6px 12px; font-size: 0.85rem; }
+    .btn-edit { background: #e0f2fe; color: #0369a1; padding: 6px 12px; font-size: 0.85rem; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.07); }
+    th { background: #0d1b3e; color: white; padding: 12px 14px; text-align: right; font-size: 0.9rem; font-weight: 600; }
+    td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+    .stock-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .stock-in { background: #dcfce7; color: #16a34a; }
+    .stock-out { background: #fee2e2; color: #dc2626; }
+    .emoji-cell { font-size: 1.6rem; text-align: center; }
+    .actions { display: flex; gap: 6px; }
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 16px; padding: 32px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+    .modal h3 { font-size: 1.2rem; margin-bottom: 24px; color: #0d1b3e; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.85rem; font-weight: 600; color: #475569; }
+    input, select, textarea { padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 0.9rem; transition: border-color 0.2s; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #0d1b3e; }
+    textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
+    .loading { text-align: center; padding: 60px; color: #94a3b8; font-size: 1.1rem; }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 24px; border-radius: 8px; font-size: 0.9rem; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+    .search-input { padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 0.9rem; width: 240px; }
+    .search-input:focus { outline: none; border-color: #0d1b3e; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span>🏴‍☠️</span>
+  <h1>הפיראט האדום — ניהול מוצרים</h1>
+</header>
+
+<div class="container">
+  <div class="toolbar">
+    <h2 id="productCount">טוען מוצרים...</h2>
+    <div style="display:flex;gap:10px;align-items:center">
+      <input class="search-input" type="text" id="searchInput" placeholder="🔍 חפש מוצר..." oninput="filterTable(this.value)" />
+      <button class="btn btn-primary" onclick="openModal()">+ הוסף מוצר חדש</button>
+    </div>
+  </div>
+
+  <div id="tableWrap">
+    <div class="loading">⏳ טוען מוצרים מהדאטהבייס...</div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">הוסף מוצר חדש</h3>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>שם המוצר *</label>
+        <input type="text" id="f-name" placeholder="למשל: LEGO City Police" />
+      </div>
+      <div class="form-group">
+        <label>מחיר (₪) *</label>
+        <input type="number" id="f-price" placeholder="149" />
+      </div>
+      <div class="form-group">
+        <label>מחיר מקורי (לפני מבצע)</label>
+        <input type="number" id="f-originalPrice" placeholder="199" />
+      </div>
+      <div class="form-group">
+        <label>מלאי *</label>
+        <input type="number" id="f-stock" placeholder="10" />
+      </div>
+      <div class="form-group">
+        <label>אמוג'י (גיבוי)</label>
+        <input type="text" id="f-emoji" placeholder="🧸" />
+      </div>
+      <div class="form-group full">
+        <label>קישור לתמונה</label>
+        <input type="url" id="f-imageUrl" placeholder="https://..." />
+      </div>
+      <div class="form-group">
+        <label>קטגוריה</label>
+        <select id="f-category">
+          <option value="lego">LEGO</option>
+          <option value="dolls">בובות ודמויות</option>
+          <option value="outdoor">חוץ וספורט</option>
+          <option value="rc">שלט רחוק</option>
+          <option value="arts">יצירה</option>
+          <option value="educational">חינוכי</option>
+          <option value="puzzles">פאזלים</option>
+          <option value="baby">תינוקות</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>דירוג (1-5)</label>
+        <input type="number" id="f-rating" placeholder="4.8" min="1" max="5" step="0.1" />
+      </div>
+      <div class="form-group">
+        <label>מספר ביקורות</label>
+        <input type="number" id="f-reviews" placeholder="0" />
+      </div>
+      <div class="form-group full">
+        <label>תגיות</label>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
+          <label style="font-weight:400;display:flex;gap:6px;align-items:center"><input type="checkbox" id="tag-sale" /> מבצע</label>
+          <label style="font-weight:400;display:flex;gap:6px;align-items:center"><input type="checkbox" id="tag-new" /> חדש</label>
+          <label style="font-weight:400;display:flex;gap:6px;align-items:center"><input type="checkbox" id="tag-popular" /> פופולרי</label>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>תיאור</label>
+        <textarea id="f-description" placeholder="תיאור קצר של המוצר..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal()">ביטול</button>
+      <button class="btn btn-save" onclick="saveProduct()">שמור</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD8NqcFYCpUJ4wCLlPbUm7oxFvG_-Pgw3U",
+    authDomain: "theredpirate-e1b39.firebaseapp.com",
+    projectId: "theredpirate-e1b39",
+    storageBucket: "theredpirate-e1b39.firebasestorage.app",
+    messagingSenderId: "868585769746",
+    appId: "1:868585769746:web:7c182ba2f1bba575fa41cb"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  let products = [];
+  let editingId = null;
+
+  async function loadProducts() {
+    const snap = await db.collection('products').orderBy('order').get();
+    products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderTable();
+  }
+
+  function renderTable() {
+    document.getElementById('productCount').textContent = `${products.length} מוצרים במלאי כולל`;
+    if (products.length === 0) {
+      document.getElementById('tableWrap').innerHTML = '<div class="loading">אין מוצרים עדיין</div>';
+      return;
+    }
+    const rows = products.map(p => `
+      <tr>
+        <td class="emoji-cell">${p.imageUrl ? `<img src="${p.imageUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />` : (p.emoji || '')}</td>
+        <td><strong>${p.name}</strong></td>
+        <td>₪${p.price}${p.originalPrice ? ` <span style="color:#94a3b8;text-decoration:line-through;font-size:0.8rem">₪${p.originalPrice}</span>` : ''}</td>
+        <td><span class="stock-badge ${p.stock > 0 ? 'stock-in' : 'stock-out'}">${p.stock > 0 ? `במלאי (${p.stock})` : 'אזל'}</span></td>
+        <td>${getCategoryName(p.category)}</td>
+        <td>${(p.tags || []).join(', ')}</td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-edit" onclick="openModal('${p.id}')">✏️ ערוך</button>
+            <button class="btn btn-delete" onclick="deleteProduct('${p.id}', '${p.name}')">🗑️ מחק</button>
+          </div>
+        </td>
+      </tr>`).join('');
+
+    document.getElementById('tableWrap').innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>שם מוצר</th>
+            <th>מחיר</th>
+            <th>מלאי</th>
+            <th>קטגוריה</th>
+            <th>תגיות</th>
+            <th>פעולות</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function getCategoryName(cat) {
+    const map = { lego: 'LEGO', dolls: 'בובות', outdoor: 'חוץ וספורט', rc: 'שלט רחוק', arts: 'יצירה', educational: 'חינוכי', puzzles: 'פאזלים', baby: 'תינוקות' };
+    return map[cat] || cat;
+  }
+
+  function openModal(id = null) {
+    editingId = id;
+    document.getElementById('modalTitle').textContent = id ? 'ערוך מוצר' : 'הוסף מוצר חדש';
+    if (id) {
+      const p = products.find(x => x.id === id);
+      document.getElementById('f-name').value = p.name || '';
+      document.getElementById('f-price').value = p.price || '';
+      document.getElementById('f-originalPrice').value = p.originalPrice || '';
+      document.getElementById('f-stock').value = p.stock ?? 10;
+      document.getElementById('f-emoji').value = p.emoji || '';
+      document.getElementById('f-category').value = p.category || 'lego';
+      document.getElementById('f-rating').value = p.rating || '';
+      document.getElementById('f-reviews').value = p.reviews || 0;
+      document.getElementById('f-description').value = p.description || '';
+      document.getElementById('f-imageUrl').value = p.imageUrl || '';
+      document.getElementById('tag-sale').checked = (p.tags || []).includes('sale');
+      document.getElementById('tag-new').checked = (p.tags || []).includes('new');
+      document.getElementById('tag-popular').checked = (p.tags || []).includes('popular');
+    } else {
+      document.getElementById('f-name').value = '';
+      document.getElementById('f-price').value = '';
+      document.getElementById('f-originalPrice').value = '';
+      document.getElementById('f-stock').value = '10';
+      document.getElementById('f-emoji').value = '';
+      document.getElementById('f-category').value = 'lego';
+      document.getElementById('f-rating').value = '4.5';
+      document.getElementById('f-reviews').value = '0';
+      document.getElementById('f-description').value = '';
+      document.getElementById('f-imageUrl').value = '';
+      document.getElementById('tag-sale').checked = false;
+      document.getElementById('tag-new').checked = true;
+      document.getElementById('tag-popular').checked = false;
+    }
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    editingId = null;
+  }
+
+  async function saveProduct() {
+    const name = document.getElementById('f-name').value.trim();
+    const price = parseFloat(document.getElementById('f-price').value);
+    const stock = parseInt(document.getElementById('f-stock').value);
+    if (!name || isNaN(price)) { showToast('יש למלא שם ומחיר'); return; }
+
+    const tags = [];
+    if (document.getElementById('tag-sale').checked) tags.push('sale');
+    if (document.getElementById('tag-new').checked) tags.push('new');
+    if (document.getElementById('tag-popular').checked) tags.push('popular');
+
+    const origPrice = parseFloat(document.getElementById('f-originalPrice').value);
+    const data = {
+      name,
+      price,
+      originalPrice: isNaN(origPrice) ? null : origPrice,
+      stock: isNaN(stock) ? 10 : stock,
+      emoji: document.getElementById('f-emoji').value || '🧸',
+      category: document.getElementById('f-category').value,
+      rating: parseFloat(document.getElementById('f-rating').value) || 4.5,
+      reviews: parseInt(document.getElementById('f-reviews').value) || 0,
+      description: document.getElementById('f-description').value.trim(),
+      imageUrl: document.getElementById('f-imageUrl').value.trim(),
+      tags
+    };
+
+    if (editingId) {
+      await db.collection('products').doc(editingId).update(data);
+      showToast('המוצר עודכן בהצלחה ✅');
+    } else {
+      const docId = name.replace(/\s+/g, '-') + '-' + Date.now();
+      data.order = products.length;
+      await db.collection('products').doc(docId).set(data);
+      showToast('המוצר נוסף בהצלחה ✅');
+    }
+    closeModal();
+    await loadProducts();
+  }
+
+  async function deleteProduct(id, name) {
+    if (!confirm(`למחוק את "${name}"?`)) return;
+    await db.collection('products').doc(id).delete();
+    showToast('המוצר נמחק');
+    await loadProducts();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function filterTable(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('tbody tr').forEach(row => {
+      const name = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
+      row.style.display = name.includes(q) ? '' : 'none';
+    });
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>

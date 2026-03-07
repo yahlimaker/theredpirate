@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הפיראט האדום - חנות הצעצועים המובילה בישראל</title>
+  <meta name="description" content="הפיראט האדום - רשת חנויות הצעצועים הגדולה בישראל. מגוון ענק של צעצועים, משחקים ומתנות לכל גיל." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://accounts.google.com/gsi/client" async></script>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="mainHeader">
+  <div class="header-top">
+    <div class="container">
+      <div class="header-top-inner">
+        <span><i class="fas fa-phone"></i> 1-800-RED-PIRATE</span>
+        <span><i class="fas fa-clock"></i> א'-ה' 09:00–21:00 | ו' 09:00–14:00</span>
+        <span><i class="fas fa-map-marker-alt"></i> 8 סניפים ברחבי הארץ</span>
+      </div>
+    </div>
+  </div>
+  <div class="header-main">
+    <div class="container">
+      <div class="header-inner">
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <nav class="main-nav" id="mainNav">
+          <a href="#categories">קטגוריות</a>
+          <a href="#deals">מבצעים</a>
+          <a href="#gift-finder">מציאת מתנה</a>
+          <a href="#branches">סניפים</a>
+          <a href="#about">אודות</a>
+        </nav>
+        <div class="header-logo" onclick="scrollToTop()">
+          <div class="logo-icon">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="30" cy="30" r="28" fill="#E63946"/>
+              <text x="30" y="38" text-anchor="middle" font-size="26" fill="white">&#x2620;</text>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-main">הפיראט האדום</span>
+            <span class="logo-sub">צעצועים ומשחקים</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="action-btn search-btn" onclick="toggleSearch()">
+            <i class="fas fa-search"></i>
+          </button>
+          <div id="authHeaderBtn">
+            <button class="action-btn" onclick="openAuthModal()" title="התחבר">
+              <i class="fas fa-user"></i>
+            </button>
+          </div>
+          <button class="action-btn cart-btn" onclick="openCart()">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="action-badge" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="search-bar" id="searchBar">
+    <div class="container">
+      <div class="search-inner">
+        <input type="text" id="searchInput" placeholder="חפש צעצועים, מותגים, קטגוריות..." onkeyup="handleSearch(event)" />
+        <button onclick="performSearch()"><i class="fas fa-search"></i> חיפוש</button>
+        <div id="searchResults" class="search-dropdown"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+    <div class="floating-items">
+      <div class="float-item item1">&#127918;</div>
+      <div class="float-item item2">&#128241;</div>
+      <div class="float-item item3">&#127921;</div>
+      <div class="float-item item4">&#127889;</div>
+      <div class="float-item item5">&#127881;</div>
+      <div class="float-item item6">&#9976;&#65039;</div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-fire"></i> מבצע שבועי - עד 50% הנחה
+      </div>
+      <h1 class="hero-title">
+        מגלים את<br/>
+        <span class="highlight">אוצר הצעצועים</span><br/>
+        הגדול בישראל
+      </h1>
+      <p class="hero-subtitle">
+        מעל 10,000 מוצרים מהמותגים המובילים בעולם.<br/>
+        מצא את המתנה המושלמת לכל גיל ולכל הזדמנות.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-hero-primary" onclick="scrollToSection('gift-finder')">
+          <i class="fas fa-magic"></i>
+          מצא מתנה עם AI
+        </button>
+        <button class="btn-hero-secondary" onclick="scrollToSection('categories')">
+          <i class="fas fa-compass"></i>
+          גלה קטגוריות
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>10K+</strong>
+          <span>מוצרים</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>8</strong>
+          <span>סניפים</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>50K+</strong>
+          <span>לקוחות מרוצים</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <strong>25+</strong>
+          <span>שנות ניסיון</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="treasure-chest">
+        <div class="chest-body">
+          <div class="chest-lid" id="chestLid">
+            <div class="chest-lock"></div>
+          </div>
+          <div class="chest-base">
+            <div class="chest-stripes"></div>
+          </div>
+        </div>
+        <div class="chest-glow"></div>
+        <div class="toys-burst" id="toysBurst">
+          <span class="burst-toy t1">&#127918;</span>
+          <span class="burst-toy t2">&#127921;</span>
+          <span class="burst-toy t3">&#128241;</span>
+          <span class="burst-toy t4">&#129668;</span>
+          <span class="burst-toy t5">&#127889;</span>
+          <span class="burst-toy t6">&#127881;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint" onclick="scrollToSection('categories')">
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ===== MARQUEE BANNER ===== -->
+<div class="marquee-banner">
+  <div class="marquee-track">
+    <span>&#9733; LEGO - עד 30% הנחה</span>
+    <span>&#9733; משלוח חינם מעל ₪199</span>
+    <span>&#9733; בדוק מלאי בסניף שלך</span>
+    <span>&#9733; מתנות לכל הגילאים</span>
+    <span>&#9733; ברבי - קולקציה חדשה</span>
+    <span>&#9733; קורקינטים חשמליים</span>
+    <span>&#9733; LEGO - עד 30% הנחה</span>
+    <span>&#9733; משלוח חינם מעל ₪199</span>
+    <span>&#9733; בדוק מלאי בסניף שלך</span>
+    <span>&#9733; מתנות לכל הגילאים</span>
+    <span>&#9733; ברבי - קולקציה חדשה</span>
+    <span>&#9733; קורקינטים חשמליים</span>
+  </div>
+</div>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="categories-section" id="categories">
+  <div class="container">
+    <div class="section-header">
+      <h2>גלה את הקטגוריות</h2>
+      <p>מגוון עצום לכל גיל וכל תחום עניין</p>
+    </div>
+    <div class="categories-grid">
+      <div class="category-card" data-category="lego" onclick="filterByCategory('lego')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #FF6B35, #F7B731)">
+          <span>&#129307;</span>
+        </div>
+        <h3>LEGO</h3>
+        <p>340+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="dolls" onclick="filterByCategory('dolls')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #FF6B9D, #C64FC9)">
+          <span>&#128131;</span>
+        </div>
+        <h3>בובות ודמויות</h3>
+        <p>520+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="outdoor" onclick="filterByCategory('outdoor')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #4CAF50, #8BC34A)">
+          <span>&#128692;</span>
+        </div>
+        <h3>חוץ וספורט</h3>
+        <p>280+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="rc" onclick="filterByCategory('rc')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #2196F3, #00BCD4)">
+          <span>&#128663;</span>
+        </div>
+        <h3>שלט רחוק</h3>
+        <p>195+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="arts" onclick="filterByCategory('arts')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #9C27B0, #673AB7)">
+          <span>&#127912;</span>
+        </div>
+        <h3>יצירה ואמנות</h3>
+        <p>410+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="educational" onclick="filterByCategory('educational')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #FF9800, #FFC107)">
+          <span>&#129302;</span>
+        </div>
+        <h3>חינוכי ולמידה</h3>
+        <p>350+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="puzzles" onclick="filterByCategory('puzzles')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #009688, #4DB6AC)">
+          <span>&#129513;</span>
+        </div>
+        <h3>פאזלים ומשחקים</h3>
+        <p>290+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+      <div class="category-card" data-category="baby" onclick="filterByCategory('baby')">
+        <div class="cat-icon" style="background: linear-gradient(135deg, #E91E63, #FF5722)">
+          <span>&#128118;</span>
+        </div>
+        <h3>תינוקות וגיל הרך</h3>
+        <p>480+ מוצרים</p>
+        <div class="cat-arrow"><i class="fas fa-arrow-left"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED PRODUCTS ===== -->
+<section class="products-section" id="products">
+  <div class="container">
+    <div class="section-header">
+      <h2>מוצרים מובילים</h2>
+      <p>הנמכרים ביותר השבוע</p>
+      <div class="section-tabs">
+        <button class="tab-btn active" onclick="filterProducts('all', this)">הכל</button>
+        <button class="tab-btn" onclick="filterProducts('sale', this)">במבצע</button>
+        <button class="tab-btn" onclick="filterProducts('new', this)">חדש</button>
+        <button class="tab-btn" onclick="filterProducts('popular', this)">פופולרי</button>
+      </div>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Products injected by JS -->
+    </div>
+    <div class="text-center mt-40">
+      <button class="btn-outline" onclick="loadMoreProducts()">
+        <i class="fas fa-plus"></i> טען עוד מוצרים
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AI GIFT FINDER ===== -->
+<section class="gift-finder-section" id="gift-finder">
+  <div class="container">
+    <div class="gift-finder-wrapper">
+      <div class="gift-finder-intro">
+        <div class="ai-badge"><i class="fas fa-robot"></i> מופעל על ידי AI</div>
+        <h2>מוצא מתנה מושלמת<br/>בשלושה שלבים</h2>
+        <p>ענה על כמה שאלות קצרות ואנחנו נמצא את המתנה האידיאלית, בהתאמה מושלמת לילד ולתקציב.</p>
+        <div class="finder-features">
+          <div><i class="fas fa-check-circle"></i> מותאם אישית</div>
+          <div><i class="fas fa-check-circle"></i> מהיר ופשוט</div>
+          <div><i class="fas fa-check-circle"></i> תוצאות מדויקות</div>
+        </div>
+      </div>
+      <div class="gift-finder-card">
+        <div class="finder-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span id="progressText">שלב 1 מתוך 3</span>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="finder-step active" id="step1">
+          <h3><i class="fas fa-birthday-cake"></i> בן/בת כמה הילד?</h3>
+          <div class="age-options">
+            <button class="age-btn" onclick="selectAge('0-2', this)">0–2</button>
+            <button class="age-btn" onclick="selectAge('3-5', this)">3–5</button>
+            <button class="age-btn" onclick="selectAge('6-8', this)">6–8</button>
+            <button class="age-btn" onclick="selectAge('9-12', this)">9–12</button>
+            <button class="age-btn" onclick="selectAge('13+', this)">13+</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="finder-step" id="step2">
+          <h3><i class="fas fa-shekel-sign"></i> מה התקציב?</h3>
+          <div class="budget-options">
+            <button class="budget-btn" onclick="selectBudget('50-100', this)">₪50 – ₪100</button>
+            <button class="budget-btn" onclick="selectBudget('100-200', this)">₪100 – ₪200</button>
+            <button class="budget-btn" onclick="selectBudget('200-400', this)">₪200 – ₪400</button>
+            <button class="budget-btn" onclick="selectBudget('400+', this)">₪400+</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="finder-step" id="step3">
+          <h3><i class="fas fa-heart"></i> מה הוא אוהב?</h3>
+          <div class="interest-options">
+            <button class="interest-btn" onclick="toggleInterest('building', this)">
+              <span>&#129307;</span> הרכבה ובנייה
+            </button>
+            <button class="interest-btn" onclick="toggleInterest('sports', this)">
+              <span>&#9917;</span> ספורט ותנועה
+            </button>
+            <button class="interest-btn" onclick="toggleInterest('art', this)">
+              <span>&#127912;</span> יצירה ואמנות
+            </button>
+            <button class="interest-btn" onclick="toggleInterest('tech', this)">
+              <span>&#129302;</span> טכנולוגיה ורובוטיקה
+            </button>
+            <button class="interest-btn" onclick="toggleInterest('adventure', this)">
+              <span>&#127754;</span> הרפתקאות וטבע
+            </button>
+            <button class="interest-btn" onclick="toggleInterest('music', this)">
+              <span>&#127925;</span> מוזיקה ובידור
+            </button>
+          </div>
+          <button class="btn-primary mt-20" id="findGiftBtn" onclick="findGifts()" disabled>
+            <i class="fas fa-magic"></i> מצא מתנות!
+          </button>
+        </div>
+
+        <!-- Results -->
+        <div class="finder-step" id="stepResults">
+          <h3><i class="fas fa-star"></i> המלצות עבורך</h3>
+          <div class="gift-results" id="giftResults"></div>
+          <button class="btn-outline mt-20" onclick="resetFinder()">
+            <i class="fas fa-redo"></i> חפש שוב
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TREASURE MAP DEALS ===== -->
+<section class="deals-section" id="deals">
+  <div class="container">
+    <div class="section-header light">
+      <div class="treasure-badge"><i class="fas fa-map"></i> מפת האוצר</div>
+      <h2>מבצעי השבוע</h2>
+      <p>הנחות מיוחדות שמתחלפות כל שבוע – אל תפספסו!</p>
+    </div>
+    <div class="deals-grid">
+      <div class="deal-card deal-featured">
+        <div class="deal-timer">
+          <i class="fas fa-hourglass-half"></i>
+          <span id="dealTimer1"></span>
+        </div>
+        <div class="deal-badge">HOT!</div>
+        <div class="deal-image">&#127918;</div>
+        <div class="deal-info">
+          <div class="deal-category">LEGO</div>
+          <h3>LEGO Star Wars Millennium Falcon</h3>
+          <div class="deal-prices">
+            <span class="price-old">₪899</span>
+            <span class="price-new">₪599</span>
+            <span class="deal-percent">-33%</span>
+          </div>
+          <div class="deal-stock">
+            <div class="stock-bar"><div class="stock-fill" style="width:65%"></div></div>
+            <span>נותרו 12 יחידות</span>
+          </div>
+          <button class="btn-deal" onclick="addToCart('lego-falcon', 'LEGO Millennium Falcon', 599)">
+            <i class="fas fa-shopping-cart"></i> הוסף לעגלה
+          </button>
+        </div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-timer">
+          <i class="fas fa-hourglass-half"></i>
+          <span id="dealTimer2"></span>
+        </div>
+        <div class="deal-image">&#128131;</div>
+        <div class="deal-info">
+          <div class="deal-category">ברבי</div>
+          <h3>ברבי Dream House עם ריהוט</h3>
+          <div class="deal-prices">
+            <span class="price-old">₪799</span>
+            <span class="price-new">₪549</span>
+            <span class="deal-percent">-31%</span>
+          </div>
+          <div class="deal-stock">
+            <div class="stock-bar"><div class="stock-fill" style="width:40%"></div></div>
+            <span>נותרו 8 יחידות</span>
+          </div>
+          <button class="btn-deal" onclick="addToCart('barbie-house', 'ברבי Dream House', 549)">
+            <i class="fas fa-shopping-cart"></i> הוסף לעגלה
+          </button>
+        </div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-image">&#128692;</div>
+        <div class="deal-info">
+          <div class="deal-category">חוץ</div>
+          <h3>קורקינט חשמלי Pro 24km/h</h3>
+          <div class="deal-prices">
+            <span class="price-old">₪1,299</span>
+            <span class="price-new">₪899</span>
+            <span class="deal-percent">-31%</span>
+          </div>
+          <div class="deal-stock">
+            <div class="stock-bar"><div class="stock-fill" style="width:20%"></div></div>
+            <span>נותרו 4 יחידות</span>
+          </div>
+          <button class="btn-deal" onclick="addToCart('scooter-pro', 'קורקינט חשמלי Pro', 899)">
+            <i class="fas fa-shopping-cart"></i> הוסף לעגלה
+          </button>
+        </div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-image">&#129302;</div>
+        <div class="deal-info">
+          <div class="deal-category">טכנולוגיה</div>
+          <h3>רובוט אינטראקטיבי Coding Robot</h3>
+          <div class="deal-prices">
+            <span class="price-old">₪450</span>
+            <span class="price-new">₪299</span>
+            <span class="deal-percent">-34%</span>
+          </div>
+          <div class="deal-stock">
+            <div class="stock-bar"><div class="stock-fill" style="width:55%"></div></div>
+            <span>נותרו 18 יחידות</span>
+          </div>
+          <button class="btn-deal" onclick="addToCart('coding-robot', 'רובוט Coding Robot', 299)">
+            <i class="fas fa-shopping-cart"></i> הוסף לעגלה
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LIVE INVENTORY CHECKER ===== -->
+<section class="inventory-section" id="inventory">
+  <div class="container">
+    <div class="inventory-wrapper">
+      <div class="inventory-icon">
+        <i class="fas fa-warehouse"></i>
+      </div>
+      <div class="inventory-content">
+        <h2>בדוק זמינות בסניף בזמן אמת</h2>
+        <p>מצאת מוצר שאהבת? בדוק אם הוא נמצא על המדף בסניף הקרוב אליך – עכשיו.</p>
+        <div class="inventory-form">
+          <input type="text" id="inventorySearch" placeholder="שם מוצר או קוד פריט..." />
+          <select id="branchSelect">
+            <option value="">בחר סניף</option>
+            <option value="tlv">תל אביב - דיזנגוף</option>
+            <option value="jlm">ירושלים - יפו</option>
+            <option value="hfa">חיפה - הכרמל</option>
+            <option value="bs">באר שבע - גרנד</option>
+            <option value="pt">פתח תקווה</option>
+            <option value="rl">ראשון לציון</option>
+            <option value="asd">אשדוד</option>
+            <option value="nat">נתניה</option>
+          </select>
+          <button onclick="checkInventory()">
+            <i class="fas fa-search"></i> בדוק
+          </button>
+        </div>
+        <div id="inventoryResult" class="inventory-result hidden"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRANCHES ===== -->
+<section class="branches-section" id="branches">
+  <div class="container">
+    <div class="section-header">
+      <h2>הסניפים שלנו</h2>
+      <p>8 סניפים ברחבי הארץ – מצא את הסניף הקרוב אליך</p>
+    </div>
+    <div class="branches-filter">
+      <button class="filter-btn active" onclick="filterBranches('all', this)">הכל</button>
+      <button class="filter-btn" onclick="filterBranches('center', this)">מרכז</button>
+      <button class="filter-btn" onclick="filterBranches('north', this)">צפון</button>
+      <button class="filter-btn" onclick="filterBranches('south', this)">דרום</button>
+    </div>
+    <div class="branches-grid" id="branchesGrid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>מה הלקוחות אומרים</h2>
+    </div>
+    <div class="swiper testimonials-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="testimonial-card">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>"שירות מדהים! הילד שלי קיבל בדיוק את הלגו שהוא רצה. כלי AI מוצא המתנה חסך לי שעות של חיפוש."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">ד</div>
+              <div>
+                <strong>דנה כהן</strong>
+                <span>תל אביב</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-card">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>"הצלחתי לבדוק מלאי בסניף ולדעת שהמוצר קיים לפני שנסעתי. פיצ'ר שהיה חסר לי שנים!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">מ</div>
+              <div>
+                <strong>משה לוי</strong>
+                <span>ירושלים</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-card">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>"קניתי כמה פעמים ותמיד קיבלתי מהר ובשלמות. ממליצה בחום!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">ר</div>
+              <div>
+                <strong>רחל אברהם</strong>
+                <span>חיפה</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-card">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>"האתר החדש נראה נהדר! קל למצוא הכל, הניווט ברור ונוח. בדיוק מה שחיפשתי."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">י</div>
+              <div>
+                <strong>יוסי גלעד</strong>
+                <span>ראשון לציון</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-wrapper">
+      <div class="newsletter-icon">
+        <i class="fas fa-envelope-open-text"></i>
+      </div>
+      <div class="newsletter-content">
+        <h2>קבל מבצעים ישירות למייל</h2>
+        <p>הירשם לניוזלטר ותקבל 10% הנחה על הקנייה הראשונה!</p>
+        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+          <input type="email" placeholder="הכנס את כתובת המייל שלך..." required />
+          <button type="submit">
+            <i class="fas fa-paper-plane"></i> הרשמה
+          </button>
+        </form>
+        <small><i class="fas fa-lock"></i> לא נשלח ספאם. ניתן להסיר בכל עת.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="about">
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <svg viewBox="0 0 60 60" fill="none" width="50" height="50">
+              <circle cx="30" cy="30" r="28" fill="#E63946"/>
+              <text x="30" y="38" text-anchor="middle" font-size="26" fill="white">&#x2620;</text>
+            </svg>
+            <div>
+              <span class="logo-main">הפיראט האדום</span>
+              <span class="logo-sub">צעצועים ומשחקים</span>
+            </div>
+          </div>
+          <p>רשת חנויות הצעצועים המובילה בישראל מאז 1998. מביאים שמחה לילדים ברחבי הארץ עם מגוון ענק של צעצועים מהמותגים הטובים בעולם.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>קטגוריות</h4>
+          <ul>
+            <li><a href="#" onclick="filterByCategory('lego')">LEGO</a></li>
+            <li><a href="#" onclick="filterByCategory('dolls')">בובות ודמויות</a></li>
+            <li><a href="#" onclick="filterByCategory('outdoor')">חוץ וספורט</a></li>
+            <li><a href="#" onclick="filterByCategory('rc')">שלט רחוק</a></li>
+            <li><a href="#" onclick="filterByCategory('arts')">יצירה ואמנות</a></li>
+            <li><a href="#" onclick="filterByCategory('educational')">חינוכי</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>שירות לקוחות</h4>
+          <ul>
+            <li><a href="#branches">מצא סניף</a></li>
+            <li><a href="#inventory">בדוק מלאי</a></li>
+            <li><a href="#">מדיניות החזרות</a></li>
+            <li><a href="#">משלוחים</a></li>
+            <li><a href="#">שאלות נפוצות</a></li>
+            <li><a href="#">צור קשר</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>צרו קשר</h4>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>1-800-RED-PIRATE</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>info@redpirate.co.il</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <span>א'-ה': 09:00–21:00<br/>ו': 09:00–14:00</span>
+          </div>
+          <div class="payment-icons">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-apple-pay"></i>
+            <i class="fab fa-google-pay"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&#169; 2025 הפיראט האדום. כל הזכויות שמורות.</p>
+      <div class="footer-bottom-links">
+        <a href="#">תנאי שימוש</a>
+        <a href="#">מדיניות פרטיות</a>
+        <a href="#">נגישות</a>
+        <a href="admin.html" style="opacity:0.3;font-size:0.75rem">ניהול</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-cart"></i> עגלת הקניות</h3>
+    <button onclick="closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <i class="fas fa-shopping-cart"></i>
+      <p>העגלה שלך ריקה</p>
+      <button class="btn-primary" onclick="closeCart()">המשך קנייה</button>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span>סך הכל:</span>
+      <strong id="cartTotal">₪0</strong>
+    </div>
+    <button class="btn-primary btn-checkout" onclick="checkout()">
+      <i class="fas fa-lock"></i> לתשלום מאובטח
+    </button>
+    <button class="btn-outline" onclick="closeCart()">המשך קנייה</button>
+  </div>
+</div>
+
+<!-- ===== AUTH MODAL ===== -->
+<div id="authModal" class="modal-overlay" onclick="closeModal('authModal')">
+  <div class="modal-box auth-modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal('authModal')"><i class="fas fa-times"></i></button>
+    <div class="auth-logo">
+      <svg viewBox="0 0 60 60" fill="none" width="44" height="44">
+        <circle cx="30" cy="30" r="28" fill="#E63946"/>
+        <text x="30" y="38" text-anchor="middle" font-size="26" fill="white">&#x2620;</text>
+      </svg>
+      <span>הפיראט האדום</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">התחבר</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">הרשמה</button>
+    </div>
+
+    <!-- Google Button -->
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <svg viewBox="0 0 24 24" width="20" height="20">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      המשך עם Google
+    </button>
+
+    <div class="auth-divider"><span>או</span></div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="auth-form" onsubmit="submitEmailAuth(event, 'login')">
+      <div class="auth-field">
+        <label>כתובת אימייל</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="your@email.com" required />
+        </div>
+      </div>
+      <div class="auth-field">
+        <label>סיסמה</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="לפחות 6 תווים" required minlength="6" />
+          <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword', this)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="auth-forgot">
+        <a href="#" onclick="forgotPassword()">שכחתי סיסמה</a>
+      </div>
+      <button type="submit" class="btn-auth-submit">
+        <i class="fas fa-sign-in-alt"></i> התחבר
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="registerForm" class="auth-form" style="display:none" onsubmit="submitEmailAuth(event, 'register')">
+      <div class="auth-field">
+        <label>שם מלא</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" id="registerName" placeholder="ישראל ישראלי" required />
+        </div>
+      </div>
+      <div class="auth-field">
+        <label>כתובת אימייל</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="registerEmail" placeholder="your@email.com" required />
+        </div>
+      </div>
+      <div class="auth-field">
+        <label>סיסמה</label>
+        <div class="auth-input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="registerPassword" placeholder="לפחות 6 תווים" required minlength="6" />
+          <button type="button" class="toggle-pass" onclick="togglePassword('registerPassword', this)">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn-auth-submit">
+        <i class="fas fa-user-plus"></i> צור חשבון
+      </button>
+      <p class="auth-terms">בהרשמה אתה מסכים ל<a href="#">תנאי השימוש</a> ול<a href="#">מדיניות הפרטיות</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast"></div>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div id="productModal" class="modal-overlay" onclick="closeModal('productModal')">
+  <div class="modal-box product-modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal('productModal')"><i class="fas fa-times"></i></button>
+    <div id="productModalContent"></div>
+  </div>
+</div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+  <i class="fas fa-anchor"></i>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

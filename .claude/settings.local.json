@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.redpirate.co.il)",
+      "WebFetch(domain:www.toystory.co.il)",
+      "Bash(ipconfig)",
+      "Bash(findstr \"IPv4\")",
+      "Bash(npm --version)",
+      "Bash(npx netlify-cli --version)",
+      "Bash(netlify deploy --dir=. --prod)",
+      "Bash(npx netlify-cli deploy --dir=. --prod)"
+    ]
+  }
+}
