@@ -275,7 +275,7 @@ function productCard(p) {
 }
 
 function getCategoryName(cat) {
-  const map = { lego: 'LEGO', dolls: 'בובות ודמויות', outdoor: 'חוץ וספורט', rc: 'שלט רחוק', arts: 'יצירה', educational: 'חינוכי', puzzles: 'פאזלים', baby: 'תינוקות' };
+  const map = { lego: 'LEGO', dolls: 'בובות ודמויות', outdoor: 'חוץ וספורט', rc: 'שלט רחוק', arts: 'יצירה', educational: 'חינוכי', puzzles: 'פאזלים', baby: 'תינוקות', other: 'אחר' };
   return map[cat] || cat;
 }
 
