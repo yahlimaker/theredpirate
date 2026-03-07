@@ -302,6 +302,7 @@ function loadMoreProducts() {
     { id: 'extra3', name: 'מיקרוסקופ לילדים', emoji: '&#128300;', category: 'educational', price: 199, originalPrice: 259, rating: 4.7, reviews: 112, tags: ['popular'], description: 'מיקרוסקופ אמיתי עם 300x הגדלה. מגיל 8+.' },
     { id: 'extra4', name: 'כלי נגינה לתינוק', emoji: '&#127925;', category: 'baby', price: 99, originalPrice: 129, rating: 4.6, reviews: 201, tags: ['sale'], description: 'סט 8 כלי נגינה צבעוניים לגיל הרך.' }
   ];
+  more.forEach(p => { if (!PRODUCTS.find(x => x.id === p.id)) PRODUCTS.push(p); });
   grid.innerHTML += more.map(productCard).join('');
   showToast('&#10003; נטענו מוצרים נוספים!');
 }
@@ -948,8 +949,7 @@ function animateTreasureChest() {
         chest.style.transform = '';
         chest.style.animation = 'chestBob 3s ease-in-out infinite';
       }, 200);
-      earnCoins(Math.floor(Math.random() * 5) + 1);
-      showToast('&#127894; מצאת מטבעות!', 'gold');
+      showToast('&#127881; גלה את אוצר הצעצועים!', 'success');
     });
   }
 }
