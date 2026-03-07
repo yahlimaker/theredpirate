@@ -692,26 +692,6 @@
   </div>
 </footer>
 
-<!-- ===== CHATBOT ===== -->
-<div id="chatbot">
-  <button id="chatToggle" onclick="toggleChat()" title="צ'אט עם עוזר AI">
-    <i class="fas fa-comment-dots" id="chatIcon"></i>
-    <i class="fas fa-times" id="chatClose" style="display:none"></i>
-  </button>
-  <div id="chatWindow">
-    <div id="chatHeader">
-      <span>🏴‍☠️ עוזר הפיראט</span>
-      <small>מופעל על ידי AI</small>
-    </div>
-    <div id="chatMessages">
-      <div class="chat-msg bot">שלום! אני עוזר הפיראט האדום 🏴‍☠️ איך אוכל לעזור לך היום?</div>
-    </div>
-    <div id="chatInput">
-      <input type="text" id="chatText" placeholder="כתוב שאלה..." onkeydown="if(event.key==='Enter')sendChat()" />
-      <button onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
-    </div>
-  </div>
-</div>
 
 <!-- ===== CART DRAWER ===== -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>

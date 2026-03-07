@@ -684,49 +684,6 @@ function closeModal(id) {
   document.body.style.overflow = '';
 }
 
-// ===== CHATBOT =====
-const chatHistory = [];
-
-function toggleChat() {
-  const win = document.getElementById('chatWindow');
-  const icon = document.getElementById('chatIcon');
-  const close = document.getElementById('chatClose');
-  win.classList.toggle('open');
-  const isOpen = win.classList.contains('open');
-  icon.style.display = isOpen ? 'none' : '';
-  close.style.display = isOpen ? '' : 'none';
-  if (isOpen) document.getElementById('chatText').focus();
-}
-
-async function sendChat() {
-  const input = document.getElementById('chatText');
-  const msg = input.value.trim();
-  if (!msg) return;
-  input.value = '';
-
-  const messages = document.getElementById('chatMessages');
-  messages.innerHTML += `<div class="chat-msg user">${msg}</div>`;
-  messages.innerHTML += `<div class="chat-msg typing" id="typing">מקליד...</div>`;
-  messages.scrollTop = messages.scrollHeight;
-
-  chatHistory.push({ role: 'user', parts: [{ text: msg }] });
-
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory })
-    });
-    const data = await res.json();
-    document.getElementById('typing')?.remove();
-    messages.innerHTML += `<div class="chat-msg bot">${data.text}</div>`;
-    chatHistory.push({ role: 'model', parts: [{ text: data.text }] });
-  } catch {
-    document.getElementById('typing')?.remove();
-    messages.innerHTML += `<div class="chat-msg bot">מצטער, אירעה שגיאה. נסה שוב.</div>`;
-  }
-  messages.scrollTop = messages.scrollHeight;
-}
 
 // ===== AUTH =====
 const AUTH_USERS_KEY = 'rp_users';

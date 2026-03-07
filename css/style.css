@@ -1359,24 +1359,6 @@ footer { background: var(--navy); }
 .modal-product-desc { color: var(--gray-dark); font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
 
 /* ===== TOAST ===== */
-/* ===== CHATBOT ===== */
-#chatbot { position: fixed; bottom: 24px; left: 24px; z-index: 9999; }
-#chatToggle { width: 56px; height: 56px; border-radius: 50%; background: var(--red); color: white; border: none; font-size: 1.4rem; cursor: pointer; box-shadow: 0 4px 16px rgba(230,57,70,0.4); display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
-#chatToggle:hover { transform: scale(1.1); }
-#chatWindow { display: none; position: absolute; bottom: 68px; left: 0; width: 320px; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); overflow: hidden; flex-direction: column; }
-#chatWindow.open { display: flex; }
-#chatHeader { background: var(--navy); color: white; padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; }
-#chatHeader span { font-weight: 700; font-size: 1rem; }
-#chatHeader small { opacity: 0.7; font-size: 0.75rem; }
-#chatMessages { padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
-.chat-msg { padding: 10px 14px; border-radius: 12px; font-size: 0.88rem; line-height: 1.5; max-width: 85%; }
-.chat-msg.bot { background: #f1f5f9; color: #1e293b; align-self: flex-start; border-bottom-right-radius: 4px; }
-.chat-msg.user { background: var(--red); color: white; align-self: flex-end; border-bottom-left-radius: 4px; }
-.chat-msg.typing { color: #94a3b8; font-style: italic; }
-#chatInput { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #f1f5f9; }
-#chatInput input { flex: 1; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 0.88rem; }
-#chatInput input:focus { outline: none; border-color: var(--red); }
-#chatInput button { background: var(--red); color: white; border: none; border-radius: 8px; padding: 9px 14px; cursor: pointer; font-size: 0.9rem; }
 
 .toast {
   position: fixed;
