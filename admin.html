@@ -270,7 +270,7 @@
       price,
       originalPrice: isNaN(origPrice) ? null : origPrice,
       stock: isNaN(stock) ? 10 : stock,
-      emoji: document.getElementById('f-emoji').value || '🧸',
+      emoji: document.getElementById('f-emoji').value.trim() || '',
       category: document.getElementById('f-category').value,
       rating: parseFloat(document.getElementById('f-rating').value) || 4.5,
       reviews: parseInt(document.getElementById('f-reviews').value) || 0,

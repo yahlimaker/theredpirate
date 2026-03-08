@@ -244,7 +244,7 @@ function productCard(p) {
   return `
     <div class="product-card" data-id="${p.id}" data-tags="${p.tags.join(',')}">
       <div class="product-image">
-        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" class="product-img" />` : `<span>${p.emoji}</span>`}
+        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" class="product-img" />` : p.emoji ? `<span>${p.emoji}</span>` : `<span style="font-size:48px;opacity:0.2">📦</span>`}
         <div class="product-badges">${badges}</div>
         <button class="product-wishlist ${inWishlist ? 'active' : ''}" onclick="toggleWishlist('${p.id}', this)" title="שמור למועדפים">
           <i class="fa${inWishlist ? 's' : 'r'} fa-heart"></i>
@@ -314,7 +314,7 @@ function quickView(id) {
     ? `<del style="color:var(--gray);font-size:16px">₪${p.originalPrice}</del> <span style="color:var(--red);font-size:30px;font-weight:900">₪${p.price}</span>`
     : `<span style="color:var(--red);font-size:30px;font-weight:900">₪${p.price}</span>`;
   document.getElementById('productModalContent').innerHTML = `
-    <div class="modal-product-image">${p.emoji}</div>
+    <div class="modal-product-image">${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" />` : p.emoji ? p.emoji : '📦'}</div>
     <div class="product-category" style="color:var(--red);font-weight:600;margin-bottom:6px">${getCategoryName(p.category)}</div>
     <div class="modal-product-name">${p.name}</div>
     <div class="modal-product-desc">${p.description}</div>
