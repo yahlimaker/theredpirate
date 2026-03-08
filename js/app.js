@@ -49,6 +49,21 @@ const BRANCHES = [
   { id: 'nat', name: 'נתניה', area: 'center', emoji: '&#127754;', sub: 'קניון עיר ימים', address: 'קניון עיר ימים, נתניה', phone: '09-555-1122', hours: 'א-ה: 09:00-21:00 | ו: 09:00-14:00', parking: 'חניון קניון', mapUrl: 'https://maps.google.com' }
 ];
 
+const GIFT_AGE_CATS = {
+  '0-2':  ['baby'],
+  '3-5':  ['dolls', 'arts', 'outdoor', 'lego', 'baby'],
+  '6-8':  ['lego', 'rc', 'arts', 'outdoor', 'puzzles', 'dolls'],
+  '9-12': ['lego', 'educational', 'puzzles', 'rc', 'outdoor', 'arts'],
+  '13+':  ['lego', 'educational', 'puzzles', 'rc', 'outdoor', 'arts']
+};
+const GIFT_BUDGET = {
+  '50-100':  [0,   100],
+  '100-200': [101, 200],
+  '200-400': [201, 400],
+  '400+':    [401, 99999]
+};
+
+// Legacy — kept only so nothing breaks if referenced elsewhere
 const GIFT_DB = {
   '0-2': {
     '50-100': [
@@ -464,50 +479,30 @@ function goToStep(step) {
   document.getElementById('progressText').textContent = `שלב ${step} מתוך 3`;
 }
 
-function findMatchingProduct(giftName) {
-  const name = giftName.toLowerCase();
-  return PRODUCTS.find(p => {
-    const pName = p.name.toLowerCase();
-    if (pName === name) return true;
-    const words = name.split(/\s+/).filter(w => w.length > 2);
-    return words.some(w => pName.includes(w));
-  });
-}
-
 function findGifts() {
   const { age, budget } = state.finder;
-  const results = GIFT_DB[age]?.[budget] || [];
+  const cats = GIFT_AGE_CATS[age] || [];
+  const [minP, maxP] = GIFT_BUDGET[budget] || [0, 99999];
+  const results = PRODUCTS.filter(p => cats.includes(p.category) && p.price >= minP && p.price <= maxP).slice(0, 4);
   document.getElementById('giftResults').innerHTML = results.length
-    ? results.map(r => {
-        const match = findMatchingProduct(r.name);
-        if (match) {
-          const img = match.imageUrl
-            ? `<img src="${match.imageUrl}" alt="${match.name}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;">`
-            : `<span style="font-size:32px">${match.emoji}</span>`;
-          return `
-            <div class="gift-result-item" onclick="quickView('${match.id}')" style="cursor:pointer">
-              <div class="gift-result-emoji">${img}</div>
-              <div class="gift-result-info">
-                <h4>${match.name}</h4>
-                <p>${r.reason}</p>
-              </div>
-              <div class="gift-result-price" style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-                <span>₪${match.price}</span>
-                <button onclick="event.stopPropagation();addToCart('${match.id}','${match.name}',${match.price})" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600">+ עגלה</button>
-              </div>
-            </div>`;
-        }
+    ? results.map(p => {
+        const img = p.imageUrl
+          ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;">`
+          : `<span style="font-size:32px">${p.emoji}</span>`;
         return `
-          <div class="gift-result-item" onclick="addGiftToCart('${r.name}',${parseInt(r.price.replace(/[^\d]/g,''))})">
-            <div class="gift-result-emoji">${r.emoji}</div>
+          <div class="gift-result-item" onclick="quickView('${p.id}')" style="cursor:pointer">
+            <div class="gift-result-emoji">${img}</div>
             <div class="gift-result-info">
-              <h4>${r.name}</h4>
-              <p>${r.reason}</p>
+              <h4>${p.name}</h4>
+              <p>${p.description.split('.')[0]}.</p>
             </div>
-            <div class="gift-result-price">${r.price}</div>
+            <div class="gift-result-price" style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+              <span>₪${p.price}</span>
+              <button onclick="event.stopPropagation();addToCart('${p.id}','${p.name}',${p.price})" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600">+ עגלה</button>
+            </div>
           </div>`;
       }).join('')
-    : '<p style="color:var(--gray);text-align:center;padding:20px">לא נמצאו תוצאות. נסה סינון אחר.</p>';
+    : '<p style="color:var(--gray);text-align:center;padding:20px">לא נמצאו מוצרים בטווח זה. נסה תקציב אחר.</p>';
   document.querySelectorAll('.finder-step').forEach(s => s.classList.remove('active'));
   document.getElementById('stepResults').classList.add('active');
   document.getElementById('progressFill').style.width = '100%';
