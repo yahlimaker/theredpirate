@@ -187,8 +187,14 @@ async function loadProductsFromFirestore() {
   try {
     const snapshot = await db.collection('products').orderBy('order').get();
     if (!snapshot.empty) {
+      const staticImages = {};
+      PRODUCTS.forEach(p => { if (p.imageUrl) staticImages[p.id] = p.imageUrl; });
       PRODUCTS.length = 0;
-      snapshot.forEach(doc => PRODUCTS.push({ id: doc.id, ...doc.data() }));
+      snapshot.forEach(doc => {
+        const data = { id: doc.id, ...doc.data() };
+        if (!data.imageUrl && staticImages[data.id]) data.imageUrl = staticImages[data.id];
+        PRODUCTS.push(data);
+      });
     }
   } catch (e) {
     console.warn('Firestore: using local data', e);
