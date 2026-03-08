@@ -464,19 +464,49 @@ function goToStep(step) {
   document.getElementById('progressText').textContent = `שלב ${step} מתוך 3`;
 }
 
+function findMatchingProduct(giftName) {
+  const name = giftName.toLowerCase();
+  return PRODUCTS.find(p => {
+    const pName = p.name.toLowerCase();
+    if (pName === name) return true;
+    const words = name.split(/\s+/).filter(w => w.length > 2);
+    return words.some(w => pName.includes(w));
+  });
+}
+
 function findGifts() {
   const { age, budget } = state.finder;
   const results = GIFT_DB[age]?.[budget] || [];
   document.getElementById('giftResults').innerHTML = results.length
-    ? results.map(r => `
-        <div class="gift-result-item" onclick="addGiftToCart('${r.name}',${parseInt(r.price.replace(/[^\d]/g,''))})">
-          <div class="gift-result-emoji">${r.emoji}</div>
-          <div class="gift-result-info">
-            <h4>${r.name}</h4>
-            <p>${r.reason}</p>
-          </div>
-          <div class="gift-result-price">${r.price}</div>
-        </div>`).join('')
+    ? results.map(r => {
+        const match = findMatchingProduct(r.name);
+        if (match) {
+          const img = match.imageUrl
+            ? `<img src="${match.imageUrl}" alt="${match.name}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;">`
+            : `<span style="font-size:32px">${match.emoji}</span>`;
+          return `
+            <div class="gift-result-item" onclick="quickView('${match.id}')" style="cursor:pointer">
+              <div class="gift-result-emoji">${img}</div>
+              <div class="gift-result-info">
+                <h4>${match.name}</h4>
+                <p>${r.reason}</p>
+              </div>
+              <div class="gift-result-price" style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+                <span>₪${match.price}</span>
+                <button onclick="event.stopPropagation();addToCart('${match.id}','${match.name}',${match.price})" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600">+ עגלה</button>
+              </div>
+            </div>`;
+        }
+        return `
+          <div class="gift-result-item" onclick="addGiftToCart('${r.name}',${parseInt(r.price.replace(/[^\d]/g,''))})">
+            <div class="gift-result-emoji">${r.emoji}</div>
+            <div class="gift-result-info">
+              <h4>${r.name}</h4>
+              <p>${r.reason}</p>
+            </div>
+            <div class="gift-result-price">${r.price}</div>
+          </div>`;
+      }).join('')
     : '<p style="color:var(--gray);text-align:center;padding:20px">לא נמצאו תוצאות. נסה סינון אחר.</p>';
   document.querySelectorAll('.finder-step').forEach(s => s.classList.remove('active'));
   document.getElementById('stepResults').classList.add('active');
