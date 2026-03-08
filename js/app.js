@@ -422,6 +422,15 @@ function closeCart() {
 }
 
 function checkout() {
+  const orders = getOrders();
+  const total = state.cart.reduce((s, i) => s + i.price * (i.qty || 1), 0);
+  orders.push({
+    id: Date.now().toString().slice(-6),
+    date: new Date().toLocaleDateString('he-IL'),
+    items: state.cart.map(i => ({ name: i.name, price: i.price })),
+    total
+  });
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
   state.cart = [];
   saveCart();
   updateCartUI();
@@ -444,6 +453,114 @@ function toggleWishlist(id, btn) {
     showToast('הוסר מהמועדפים');
   }
   localStorage.setItem('rp_wishlist', JSON.stringify(state.wishlist));
+}
+
+function openWishlist() {
+  closeUserDropdown();
+  renderWishlist();
+  document.getElementById('wishlistDrawer').classList.add('open');
+  document.getElementById('wishlistOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeWishlist() {
+  document.getElementById('wishlistDrawer').classList.remove('open');
+  document.getElementById('wishlistOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function renderWishlist() {
+  const items = state.wishlist.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+  const el = document.getElementById('wishlistItems');
+  if (!items.length) {
+    el.innerHTML = `<div class="cart-empty"><i class="fas fa-heart"></i><p>המועדפים שלך ריקים</p><button class="btn-primary" onclick="closeWishlist()">גלה מוצרים</button></div>`;
+    return;
+  }
+  el.innerHTML = items.map(p => {
+    const img = p.imageUrl
+      ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;">`
+      : `<span style="font-size:36px">${p.emoji}</span>`;
+    return `
+      <div class="cart-item" style="align-items:center;gap:12px">
+        <div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${img}</div>
+        <div class="cart-item-info" style="flex:1">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-price" style="color:var(--red);font-weight:700">₪${p.price}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button onclick="addToCart('${p.id}','${p.name}',${p.price});renderWishlist()" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;font-weight:600">+ עגלה</button>
+          <button onclick="removeFromWishlist('${p.id}')" style="background:none;border:1px solid #ddd;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;color:var(--gray)">הסר</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+function removeFromWishlist(id) {
+  state.wishlist = state.wishlist.filter(x => x !== id);
+  localStorage.setItem('rp_wishlist', JSON.stringify(state.wishlist));
+  document.querySelectorAll('[data-id="' + id + '"] .product-wishlist').forEach(btn => {
+    btn.classList.remove('active');
+    btn.innerHTML = '<i class="far fa-heart"></i>';
+  });
+  renderWishlist();
+}
+
+// ===== ORDERS =====
+const ORDERS_KEY = 'rp_orders';
+function getOrders() { return JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]'); }
+function openOrders() {
+  closeUserDropdown();
+  const orders = getOrders();
+  const el = document.getElementById('ordersContent');
+  if (!orders.length) {
+    el.innerHTML = `<div style="text-align:center;padding:30px;color:var(--gray)"><i class="fas fa-box" style="font-size:48px;margin-bottom:12px;display:block;opacity:.3"></i><p>אין הזמנות קודמות</p></div>`;
+  } else {
+    el.innerHTML = orders.slice().reverse().map(o => `
+      <div style="border:1px solid #eee;border-radius:10px;padding:14px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-weight:700">הזמנה #${o.id}</span>
+          <span style="color:var(--gray);font-size:13px">${o.date}</span>
+        </div>
+        <div style="font-size:13px;color:var(--gray);margin-bottom:8px">${o.items.map(i => i.name).join(', ')}</div>
+        <div style="color:var(--red);font-weight:700">סה"כ: ₪${o.total}</div>
+      </div>`).join('');
+  }
+  openModal('ordersModal');
+}
+
+// ===== ACCOUNT SETTINGS =====
+function openAccountSettings() {
+  closeUserDropdown();
+  const user = getCurrentUser();
+  if (!user) return;
+  const initials = user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  document.getElementById('accountContent').innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:70px;height:70px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;font-weight:700;margin:0 auto 8px">${initials}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <label style="display:block;font-weight:600;margin-bottom:6px;font-size:14px">שם מלא</label>
+      <input id="settingsName" value="${user.name}" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:15px;direction:rtl;box-sizing:border-box">
+    </div>
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-weight:600;margin-bottom:6px;font-size:14px">אימייל</label>
+      <input value="${user.email}" disabled style="width:100%;padding:10px;border:1px solid #eee;border-radius:8px;font-size:15px;background:#f8f8f8;direction:ltr;box-sizing:border-box;color:var(--gray)">
+    </div>
+    <button onclick="saveAccountSettings()" style="width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:12px;font-size:16px;font-weight:600;cursor:pointer">שמור שינויים</button>`;
+  openModal('accountModal');
+}
+function saveAccountSettings() {
+  const user = getCurrentUser();
+  const newName = document.getElementById('settingsName').value.trim();
+  if (!newName) return;
+  user.name = newName;
+  saveSession(user);
+  const users = getUsers();
+  if (users[user.email]) { users[user.email].name = newName; saveUsers(users); }
+  updateAuthUI(user);
+  closeModal('accountModal');
+  showToast('&#10003; הגדרות נשמרו בהצלחה', 'success');
+}
+
+function closeUserDropdown() {
+  document.getElementById('userDropdown')?.classList.remove('show');
 }
 
 // ===== GIFT FINDER =====
@@ -855,9 +972,9 @@ function updateAuthUI(user) {
             <strong>${user.name}</strong>
             <span>${user.email}</span>
           </div>
-          <button class="user-dropdown-item"><i class="fas fa-box"></i> ההזמנות שלי</button>
-          <button class="user-dropdown-item"><i class="fas fa-heart"></i> המועדפים שלי</button>
-          <button class="user-dropdown-item"><i class="fas fa-user-cog"></i> הגדרות חשבון</button>
+          <button class="user-dropdown-item" onclick="openOrders()"><i class="fas fa-box"></i> ההזמנות שלי</button>
+          <button class="user-dropdown-item" onclick="openWishlist()"><i class="fas fa-heart"></i> המועדפים שלי</button>
+          <button class="user-dropdown-item" onclick="openAccountSettings()"><i class="fas fa-user-cog"></i> הגדרות חשבון</button>
           <button class="user-dropdown-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> התנתק</button>
         </div>
       </div>`;

@@ -719,6 +719,34 @@
   </div>
 </div>
 
+<!-- ===== WISHLIST DRAWER ===== -->
+<div class="cart-overlay" id="wishlistOverlay" onclick="closeWishlist()"></div>
+<div class="cart-drawer" id="wishlistDrawer">
+  <div class="cart-header">
+    <h3><i class="fas fa-heart"></i> המועדפים שלי</h3>
+    <button onclick="closeWishlist()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-items" id="wishlistItems"></div>
+</div>
+
+<!-- ===== ORDERS MODAL ===== -->
+<div id="ordersModal" class="modal-overlay" onclick="closeModal('ordersModal')">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:500px;width:90%">
+    <button class="modal-close" onclick="closeModal('ordersModal')"><i class="fas fa-times"></i></button>
+    <h3 style="margin-bottom:20px;font-size:20px"><i class="fas fa-box" style="color:var(--red);margin-left:8px"></i> ההזמנות שלי</h3>
+    <div id="ordersContent"></div>
+  </div>
+</div>
+
+<!-- ===== ACCOUNT SETTINGS MODAL ===== -->
+<div id="accountModal" class="modal-overlay" onclick="closeModal('accountModal')">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:420px;width:90%">
+    <button class="modal-close" onclick="closeModal('accountModal')"><i class="fas fa-times"></i></button>
+    <h3 style="margin-bottom:20px;font-size:20px"><i class="fas fa-user-cog" style="color:var(--red);margin-left:8px"></i> הגדרות חשבון</h3>
+    <div id="accountContent"></div>
+  </div>
+</div>
+
 <!-- ===== AUTH MODAL ===== -->
 <div id="authModal" class="modal-overlay" onclick="closeModal('authModal')">
   <div class="modal-box auth-modal-box" onclick="event.stopPropagation()">
@@ -829,6 +857,6 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="js/app.js?v=5"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>
